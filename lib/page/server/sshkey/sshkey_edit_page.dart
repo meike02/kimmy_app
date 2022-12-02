@@ -8,6 +8,7 @@ import 'package:kimmy/data/model/sshkey_info.dart';
 import 'package:kimmy/data/store/sshkey_list_controller.dart';
 import 'package:kimmy/core/utils/extensions.dart';
 
+import '../../../core/component/app_bar/blur_app_bar.dart';
 import '../../../core/utils/component_function.dart';
 
 class SSHKeyEditPage extends StatelessWidget {
@@ -26,10 +27,7 @@ class SSHKeyEditPage extends StatelessWidget {
     final sshKeyController = Get.find<SSHKeyListController>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("$actionName密钥信息"),
-        centerTitle: false,
-      ),
+      appBar: BlurAppBar(name: "$actionName密钥信息"),
       body: Column(
         children: [
           Form(
@@ -114,8 +112,6 @@ class SSHKeyEditPage extends StatelessWidget {
                         await sshKeyController.add(sshKeyData);
                       }
                       Get.back();
-                    } else {
-                      print("不合法！！");
                     }
                   },
                   child: const Text('提交'))

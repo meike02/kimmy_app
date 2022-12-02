@@ -93,6 +93,7 @@ class BoxController<T extends BaseModel> extends GetxController{
     await loadingData();
     // _box.deleteFromDisk();
     _initialized = true;
+    print("初始化");
     update();
   }
 }

@@ -1,35 +1,46 @@
 import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:kimmy/core/utils/extensions.dart';
 import 'package:kimmy/core/utils/global_props.dart';
 
-class BlurAppBar extends StatelessWidget{
-  const BlurAppBar({super.key,required this.name});
+class BlurAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const BlurAppBar({
+    super.key,
+    required this.name,
+    this.centerTitle = false,
+    this.actions
+  });
 
   final String name;
+  final bool centerTitle;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
-    final top = MediaQuery.of(context).padding.top;
-    final width = MediaQuery.of(context).size.width;
+    final top = MediaQuery
+        .of(context)
+        .padding
+        .top;
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(
             sigmaX: 14, sigmaY: 14, tileMode: TileMode.mirror),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(10, top+12, 10, 8),
-          child: Row(
-            children: [
-              const Text("密钥列表").editProp(fontSize: 24,fontWeight: FontWeight.bold)
-            ],
-          ).intoContainer(height: appBarContentHeight),
+        child: AppBar(
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          backgroundColor: isDark(context) ? Colors.black12 : Colors.white12,
+          title: Text(name).editProp(fontSize: 24, fontWeight: FontWeight.bold),
+          automaticallyImplyLeading: true,
+          actions: actions,
+          centerTitle: centerTitle,
         ),
       ),
-    ).intoContainer(
-      color: isDark(context) ? Colors.black12 : Colors.white12
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(appBarContentHeight+18);
 
 }

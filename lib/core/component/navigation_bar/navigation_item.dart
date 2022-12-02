@@ -37,10 +37,11 @@ class _NavigationItem extends State<NavigationItem>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // duration: const Duration(milliseconds: 180),
+    return AnimatedContainer(
+      curve: Curves.easeInOutQuart,
+      duration: const Duration(milliseconds: 260),
       decoration: BoxDecoration(
-        color: selected?Theme.of(context).colorScheme.secondaryContainer.editOpacity(0.4):Colors.transparent,
+        color: selected?Theme.of(context).colorScheme.secondaryContainer.editOpacity(0.4):null,
         borderRadius: BorderRadius.circular(100)
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

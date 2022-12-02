@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kimmy/core/component/app_bar/blur_app_bar.dart';
 import 'package:kimmy/core/utils/global_props.dart';
 import 'package:kimmy/page/server/sshkey/component/sshkey_item.dart';
 import 'package:kimmy/page/server/sshkey/sshkey_edit_page.dart';
@@ -19,7 +20,7 @@ class SSHKeyListPage extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: createBlurAppBar(context,"密钥列表"),
+      appBar: const BlurAppBar(name: "密钥列表"),
       body: Stack(
         children: [
           GetBuilder<SSHKeyListController>(builder: (sshKeyController) {
@@ -28,7 +29,7 @@ class SSHKeyListPage extends StatelessWidget {
               visible: sshKeyList.isEmpty,
               replacement: ListView.builder(
                   // itemCount: sshKeyList.length,
-                  itemCount: 20,
+                  itemCount: 3,
                   padding: EdgeInsets.only(
                       top: appBarHeight(context), bottom: 106 + bottom),
                   itemBuilder: (context, index) {

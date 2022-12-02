@@ -20,7 +20,7 @@ class FlexNavigationBar extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final bottom = MediaQuery.of(context).padding.bottom;
     final top = MediaQuery.of(context).padding.top;
-    const double bottomPadding = 20;
+    const double bottomPadding = 0;
     const double sidePadding = 14;
     const double navigationBarHeight = 68;
     const double navigationBarRadius = 20;

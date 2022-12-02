@@ -19,16 +19,6 @@ class NavigationBarController extends GetxController{
         name: "server",
         page: ServerListPage(),
         icon: Icons.computer_rounded
-    ),
-    NavigationItemInfo(
-        name: "server",
-        page: SSHKeyEditPage(),
-        icon: Icons.computer_rounded
-    ),
-    NavigationItemInfo(
-        name: "sshkey",
-        page: SSHKeyListPage(),
-        icon: Icons.key_rounded
     )
   ];
 

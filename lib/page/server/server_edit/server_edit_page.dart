@@ -5,6 +5,7 @@ import 'package:kimmy/core/utils/extensions.dart';
 import 'package:kimmy/data/store/server_list_controller.dart';
 import 'package:kimmy/page/server/server_edit/component/sshkey_selector.dart';
 
+import '../../../core/component/app_bar/blur_app_bar.dart';
 import '../../../core/utils/component_function.dart';
 
 class ServerEditPage extends StatelessWidget {
@@ -23,7 +24,7 @@ class ServerEditPage extends StatelessWidget {
     var serverData = serverInfo ?? ServerInfo();
     var expanded = true;
     return Scaffold(
-      appBar: createBlurAppBar(context,"$actionName服务器信息"),
+      appBar: BlurAppBar(name: "$actionName服务器信息"),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Column(
@@ -40,11 +41,11 @@ class ServerEditPage extends StatelessWidget {
                         labelText: "名称"),
                     createTextFormField(
                         validator: (value) {
-                          final ipRegExp = RegExp(
-                              r"((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$");
+                          final ipDomainRegExp = RegExp(
+                              r"((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}");
                           final domainRegExp = RegExp(
                               r"^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,6}$");
-                          if (!domainRegExp.hasMatch(value)) {
+                          if (!ipDomainRegExp.hasMatch(value)) {
                             return "主机IP或域名不合法！";
                           } else {
                             serverData.host = value;
@@ -120,8 +121,7 @@ class ServerEditPage extends StatelessWidget {
                         } else {
                           serverController.add(serverData);
                         }
-                      } else {
-                        print("不合法！！");
+                        Get.back();
                       }
                     },
                     child: const Text('提交'))

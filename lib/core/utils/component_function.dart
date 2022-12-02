@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kimmy/core/utils/extensions.dart';
 
 import '../component/app_bar/blur_app_bar.dart';
@@ -59,12 +60,4 @@ Widget createTextFormField({
   ).intoContainer(
     margin: const EdgeInsets.fromLTRB(6, 12, 6, 0)
   );
-}
-
-PreferredSize createBlurAppBar(BuildContext context, String name){
-  final top = MediaQuery.of(context).padding.top;
-  final width = MediaQuery.of(context).size.width;
-  return PreferredSize(
-      preferredSize: Size(width, appBarHeight(context)),
-      child: BlurAppBar(name: name));
 }

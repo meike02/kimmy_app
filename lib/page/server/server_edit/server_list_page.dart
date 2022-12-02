@@ -5,6 +5,7 @@ import 'package:kimmy/data/store/server_list_controller.dart';
 import 'package:kimmy/page/server/server_edit/component/server_item.dart';
 import 'package:kimmy/page/server/server_edit/server_edit_page.dart';
 
+import '../../../core/component/app_bar/blur_app_bar.dart';
 import '../../../core/utils/component_function.dart';
 import '../../../core/utils/global_props.dart';
 
@@ -19,7 +20,7 @@ class ServerListPage extends StatelessWidget{
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: createBlurAppBar(context,"服务器列表"),
+      appBar: const BlurAppBar(name: "服务器列表"),
       body: Stack(
         children: [
           GetBuilder<ServerListController>(builder: (serverController) {
@@ -28,7 +29,7 @@ class ServerListPage extends StatelessWidget{
               visible: serverList.isEmpty,
               replacement: ListView.builder(
                 // itemCount: sshKeyList.length,
-                  itemCount: 20,
+                  itemCount: 3,
                   padding: EdgeInsets.only(
                       top: appBarHeight(context), bottom: 106 + bottom),
                   itemBuilder: (context, index) {

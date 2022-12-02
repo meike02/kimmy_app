@@ -14,7 +14,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
       home: Home(),
       theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00848c))),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: const Color(0xFF00848c))),
       darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Color(0xFF00848c),
-            brightness: Brightness.dark
-          )),
+              seedColor: Color(0xFF00848c), brightness: Brightness.dark),
+      ),
     );
   }
 }

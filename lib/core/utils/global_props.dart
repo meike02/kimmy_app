@@ -10,7 +10,7 @@ bool isDark(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark;
 
 double appBarHeight(BuildContext context) =>
-    MediaQuery.of(context).padding.top + 12 + appBarContentHeight;
+    MediaQuery.of(context).padding.top + 18 + appBarContentHeight;
 
 double appBarContentHeight = 32;
 
