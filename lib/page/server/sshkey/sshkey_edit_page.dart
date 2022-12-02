@@ -27,7 +27,7 @@ class SSHKeyEditPage extends StatelessWidget {
     final sshKeyController = Get.find<SSHKeyListController>();
 
     return Scaffold(
-      appBar: BlurAppBar(name: "$actionName密钥信息"),
+      appBar: BlurAppBar(title: "$actionName密钥信息"),
       body: Column(
         children: [
           Form(
@@ -68,15 +68,6 @@ class SSHKeyEditPage extends StatelessWidget {
                             File? sshKeyFile = result == null
                                 ? null
                                 : File(result.files.single.path!);
-                            // XTypeGroup typeGroup = XTypeGroup(
-                            //   extensions: [""],
-                            //   macUTIs: ["public.data"]
-                            // );
-                            // final initialDirectory = (await getApplicationSupportDirectory()).path;
-                            // final XFile? sshKeyFile = await openFile(
-                            //   acceptedTypeGroups: <XTypeGroup>[typeGroup],
-                            //   initialDirectory: initialDirectory,
-                            // );
                             if (sshKeyFile != null) {
                               sshKeyDataController.text =
                                   await sshKeyFile.readAsString();

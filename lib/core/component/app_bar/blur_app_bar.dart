@@ -8,12 +8,12 @@ import 'package:kimmy/core/utils/global_props.dart';
 class BlurAppBar extends StatelessWidget implements PreferredSizeWidget {
   const BlurAppBar({
     super.key,
-    required this.name,
+    required this.title,
     this.centerTitle = false,
     this.actions
   });
 
-  final String name;
+  final String title;
   final bool centerTitle;
   final List<Widget>? actions;
 
@@ -31,7 +31,7 @@ class BlurAppBar extends StatelessWidget implements PreferredSizeWidget {
           surfaceTintColor: Colors.transparent,
           shadowColor: Colors.transparent,
           backgroundColor: isDark(context) ? Colors.black12 : Colors.white12,
-          title: Text(name).editProp(fontSize: 24, fontWeight: FontWeight.bold),
+          title: Text(title).editProp(fontSize: 24, fontWeight: FontWeight.bold),
           automaticallyImplyLeading: true,
           actions: actions,
           centerTitle: centerTitle,

@@ -6,10 +6,11 @@ import 'package:kimmy/page/server/server_edit/component/server_item.dart';
 import 'package:kimmy/page/server/server_edit/server_edit_page.dart';
 
 import '../../../core/component/app_bar/blur_app_bar.dart';
+import '../../../core/component/app_bar/blur_sliver_app_bar.dart';
 import '../../../core/utils/component_function.dart';
 import '../../../core/utils/global_props.dart';
 
-class ServerListPage extends StatelessWidget{
+class ServerListPage extends StatelessWidget {
   ServerListPage({super.key});
 
   final controller = Get.put<ServerListController>(ServerListController());
@@ -20,29 +21,30 @@ class ServerListPage extends StatelessWidget{
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const BlurAppBar(name: "服务器列表"),
       body: Stack(
         children: [
-          GetBuilder<ServerListController>(builder: (serverController) {
-            final serverList = serverController.modelList;
-            return Visibility(
-              visible: serverList.isEmpty,
-              replacement: ListView.builder(
-                // itemCount: sshKeyList.length,
-                  itemCount: 3,
-                  padding: EdgeInsets.only(
-                      top: appBarHeight(context), bottom: 106 + bottom),
-                  itemBuilder: (context, index) {
+          CustomScrollView(
+            slivers: [
+              const BlurSliverAppBar(title: "服务器列表"),
+              GetBuilder<ServerListController>(builder: (serverController) {
+                final serverList = serverController.modelList;
+                return Visibility(
+                  visible: serverList.isEmpty,
+                  replacement: SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
                     final serverInfo = serverList[0];
                     return ServerItem(
                       serverInfo: serverInfo,
-                    );
-                  }),
-              child: const Center(
-                child: Text("密钥列表为空"),
-              ),
-            );
-          }),
+                    ).intoContainer(
+                        padding: const EdgeInsets.symmetric(horizontal: 10));
+                  }, childCount: 3)),
+                  child: const Center(
+                    child: Text("密钥列表为空"),
+                  ),
+                );
+              }),
+            ],
+          ),
           Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
@@ -53,10 +55,9 @@ class ServerListPage extends StatelessWidget{
             ),
           ).intoContainer(
               margin:
-              EdgeInsets.only(bottom: bottom + 22 + 52 + 24, right: 10)),
+                  EdgeInsets.only(bottom: bottom + 22 + 52 + 24, right: 10)),
         ],
       ).intoContainer(padding: const EdgeInsets.symmetric(horizontal: 10)),
     ).loseFocus(context).intoLoadingPage<ServerListController>();
   }
-
 }

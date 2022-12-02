@@ -24,7 +24,7 @@ class ServerEditPage extends StatelessWidget {
     var serverData = serverInfo ?? ServerInfo();
     var expanded = true;
     return Scaffold(
-      appBar: BlurAppBar(name: "$actionName服务器信息"),
+      appBar: BlurAppBar(title: "$actionName服务器信息"),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Column(
