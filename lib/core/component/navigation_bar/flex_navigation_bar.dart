@@ -57,7 +57,7 @@ class FlexNavigationBar extends StatelessWidget {
                     border: Border.all(
                         color: Color.fromARGB(
                             isDark(context) ? 34 : 136, 255, 255, 255),
-                        width: 1.3),
+                        width: 1.6),
                     borderRadius: const BorderRadius.all(Radius.circular(navigationBarRadius)),
                   )).intoContainer(
                   padding:
@@ -70,7 +70,7 @@ class FlexNavigationBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                         color:
-                            Color.fromARGB(isDark(context) ? 122 : 34, 0, 0, 0),
+                            Color.fromARGB(isDark(context) ? 198 : 34, 0, 0, 0),
                         width: 0.4),
                     borderRadius: const BorderRadius.all(Radius.circular(navigationBarRadius)),
                   ),

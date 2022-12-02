@@ -100,7 +100,7 @@ class _SSHKeySelectorState extends State<SSHKeySelector>{
                             Text(sshKeyInfo.type)
                           ],
                         ).intoContainer(
-                            margin: EdgeInsets.only(top: 8,bottom: 8)
+                            margin: const EdgeInsets.only(top: 8,bottom: 8)
                         ),
                         const Divider()
                       ],
