@@ -61,10 +61,10 @@ class _SSHKeySelectorState extends State<SSHKeySelector> {
               validator: (value) {
                 final passwordRegExp = RegExp(
                     "(?=.*([a-zA-Z].*))(?=.*[0-9].*)[a-zA-Z0-9-*/+.~!@#\$%^&*()]{6,20}\$");
-                if (passwordRegExp.hasMatch(value)) {
-                  return null;
+                if (!passwordRegExp.hasMatch(value)) {
+                  return "密码不合法！";
                 }
-                return "密码不合法！";
+                return null;
               },
               onChanged: (value) {
                 password = value;
@@ -85,10 +85,13 @@ class _SSHKeySelectorState extends State<SSHKeySelector> {
                 }
                 // widget.expanded(extended);
               },
-              onChanged: (value) {
-                sshKeyName = value;
-                widget.onChanged(useSSHKey, password, sshKeyName);
-              }),
+            validator: (value) {
+                if(value.isEmpty) {
+                  return "密钥不能为空！";
+                }
+                return null;
+            }
+          ),
         ),
         AnimatedSize(
           duration: const Duration(milliseconds: 240),
@@ -127,6 +130,8 @@ class _SSHKeySelectorState extends State<SSHKeySelector> {
                       ],
                     ).intoInkWell(onTap: () {
                       keyController.text = sshKeyInfo.name;
+                      sshKeyName = keyController.text;
+                      widget.onChanged(useSSHKey, password, sshKeyName);
                       setState(() {
                         extended = false;
                       });
