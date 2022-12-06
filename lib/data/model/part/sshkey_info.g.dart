@@ -10,7 +10,8 @@ SSHKeyInfo _$SSHKeyInfoFromJson(Map<String, dynamic> json) => SSHKeyInfo()
   ..name = json['name'] as String
   ..privateKeyData = json['privateKeyData'] as String
   ..type = json['type'] as String
-  ..password = json['password'] as String?;
+  ..password = json['password'] as String?
+  ..used = json['used'] as int;
 
 Map<String, dynamic> _$SSHKeyInfoToJson(SSHKeyInfo instance) =>
     <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$SSHKeyInfoToJson(SSHKeyInfo instance) =>
       'privateKeyData': instance.privateKeyData,
       'type': instance.type,
       'password': instance.password,
+      'used': instance.used,
     };

@@ -7,22 +7,23 @@ import 'package:kimmy/core/utils/extensions.dart';
 import '../../../../data/store/sshkey_list_controller.dart';
 
 class SSHKeySelector extends StatefulWidget {
-  SSHKeySelector({
-    super.key,
-    required this.onChanged,
-    required this.useSSHKey});
+  SSHKeySelector({super.key, required this.onChanged});
 
   final controller = Get.put<SSHKeyListController>(SSHKeyListController());
-  final void Function(String) onChanged;
-  final bool useSSHKey;
+  final void Function(bool useSSHKey, String? password, String? sshKeyName)
+      onChanged;
 
   @override
   State<StatefulWidget> createState() {
     return _SSHKeySelectorState();
   }
 }
-class _SSHKeySelectorState extends State<SSHKeySelector>{
+
+class _SSHKeySelectorState extends State<SSHKeySelector> {
   bool extended = true;
+  bool useSSHKey = false;
+  String? sshKeyName;
+  String? password;
   TextEditingController keyController = TextEditingController();
 
   @override
@@ -35,34 +36,59 @@ class _SSHKeySelectorState extends State<SSHKeySelector>{
     return Column(
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("是否使用密钥进行连接").editProp(fontSize: 16),
+            Switch(
+                value: useSSHKey,
+                onChanged: (value) {
+                  setState(() {
+                    useSSHKey = value;
+                  });
+                  if(useSSHKey) {
+                    password = null;
+                  } else {
+                    sshKeyName = null;
+                  }
+                  widget.onChanged(useSSHKey, password, sshKeyName);
+                })
+          ],
+        ).intoContainer(margin: const EdgeInsets.fromLTRB(20, 6, 10, 0)),
         Visibility(
-          visible: widget.useSSHKey,
+          visible: useSSHKey,
           replacement: createTextFormField(
               validator: (value) {
-                final passwordRegExp = RegExp("(?=.*([a-zA-Z].*))(?=.*[0-9].*)[a-zA-Z0-9-*/+.~!@#\$%^&*()]{6,20}\$");
-                if (passwordRegExp.hasMatch(value)){
-                  widget.onChanged(value);
+                final passwordRegExp = RegExp(
+                    "(?=.*([a-zA-Z].*))(?=.*[0-9].*)[a-zA-Z0-9-*/+.~!@#\$%^&*()]{6,20}\$");
+                if (passwordRegExp.hasMatch(value)) {
+                  return null;
                 }
-                return null;
+                return "密码不合法！";
+              },
+              onChanged: (value) {
+                password = value;
+                widget.onChanged(useSSHKey, password, sshKeyName);
               },
               labelText: "密码",
-              maxLines: 1
-          ),
+              maxLines: 1),
           // TODO: 选择rsakey
           child: createTextFormField(
               labelText: "密钥",
               readOnly: true,
               controller: keyController,
               onTap: () {
-                if(keyController.text != ""){
+                if (keyController.text != "") {
                   setState(() {
                     extended = !extended;
                   });
                 }
                 // widget.expanded(extended);
               },
-              onChanged: (value) => widget.onChanged(value)
-          ),
+              onChanged: (value) {
+                sshKeyName = value;
+                widget.onChanged(useSSHKey, password, sshKeyName);
+              }),
         ),
         AnimatedSize(
           duration: const Duration(milliseconds: 240),
@@ -70,24 +96,20 @@ class _SSHKeySelectorState extends State<SSHKeySelector>{
           child: ConstrainedBox(
             // duration: const Duration(milliseconds: 240),
             // height: extended ? 240 : 0,
-            constraints: BoxConstraints(
-                maxHeight: widget.useSSHKey && extended ? 220 : 0
-            ),
-            child:GetBuilder<SSHKeyListController>(builder: (sshKeyController) {
+            constraints:
+                BoxConstraints(maxHeight: useSSHKey && extended ? 220 : 0),
+            child:
+                GetBuilder<SSHKeyListController>(builder: (sshKeyController) {
               final sshKeyList = sshKeyController.modelList;
               return SingleChildScrollView(
                 controller: ScrollController(),
                 child: Column(
-                  children: List.generate(30+1, (index) {
-                    if(index == 30){
+                  children: List.generate(30 + 1, (index) {
+                    if (index == 30) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.add_rounded)
-                        ],
-                      ).intoInkWell(
-                          onTap: (){}
-                      );
+                        children: const [Icon(Icons.add_rounded)],
+                      ).intoInkWell(onTap: () {});
                     }
                     final sshKeyInfo = sshKeyList[0];
                     return Column(
@@ -95,16 +117,15 @@ class _SSHKeySelectorState extends State<SSHKeySelector>{
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("$index${sshKeyInfo.name}")
-                                .editProp(fontWeight: FontWeight.bold,fontSize: 16),
+                            Text("$index${sshKeyInfo.name}").editProp(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                             Text(sshKeyInfo.type)
                           ],
                         ).intoContainer(
-                            margin: const EdgeInsets.only(top: 8,bottom: 8)
-                        ),
+                            margin: const EdgeInsets.only(top: 8, bottom: 8)),
                         const Divider()
                       ],
-                    ).intoInkWell(onTap: (){
+                    ).intoInkWell(onTap: () {
                       keyController.text = sshKeyInfo.name;
                       setState(() {
                         extended = false;
@@ -114,7 +135,8 @@ class _SSHKeySelectorState extends State<SSHKeySelector>{
                   }),
                 ),
               ).intoContainer(
-                  padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               );
             }),
           ),
@@ -122,5 +144,4 @@ class _SSHKeySelectorState extends State<SSHKeySelector>{
       ],
     );
   }
-
 }

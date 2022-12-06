@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kimmy/data/model/server_info.dart';
 import 'package:kimmy/core/utils/extensions.dart';
+import 'package:kimmy/data/model/sshkey_info.dart';
 import 'package:kimmy/data/store/server_list_controller.dart';
+import 'package:kimmy/data/store/sshkey_list_controller.dart';
 import 'package:kimmy/page/server/server_edit/component/sshkey_selector.dart';
 
 import '../../../core/component/app_bar/blur_app_bar.dart';
@@ -17,7 +19,8 @@ class ServerEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final serverController = Get.put<ServerListController>(ServerListController());
+    final serverController = Get.find<ServerListController>();
+    final sshKeyController = Get.find<SSHKeyListController>();
 
     var isEditing =  serverInfo != null;
     final actionName = isEditing ? "编辑" : "新增";
@@ -77,32 +80,17 @@ class ServerEditPage extends StatelessWidget {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("是否使用密钥进行连接")
-                                  .editProp(fontSize: 16),
-                              Switch(
-                                  value: serverData.useSSHKey,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      serverData.useSSHKey = value;
-                                    });
-                                  })
-                            ],
-                          ).intoContainer(
-                              margin: const EdgeInsets.fromLTRB(20, 6, 10, 0)
-                          ),
                           // AnimatedSize(
                           //   duration: const Duration(milliseconds: 240),
                           //   // height: serverData.useSSHKey && expanded ? 60 + 220 : 60,
                           //   child: ,
                           // ),
                           SSHKeySelector(
-                              onChanged: (keyName){
-                                serverData.sshKey = keyName;
+                              onChanged: (useSSHKey, password, sshKeyName){
+                                serverData.useSSHKey = useSSHKey;
+                                serverData.password = password;
+                                serverData.sshKey = sshKeyName;
                               },
-                              useSSHKey: serverData.useSSHKey
                           )
                         ],
                       );
@@ -119,6 +107,11 @@ class ServerEditPage extends StatelessWidget {
                         if(isEditing){
                           serverController.edit(serverData);
                         } else {
+                          if(serverData.useSSHKey){
+                            var sshKeyData = SSHKeyInfo.fromJson(sshKeyController.get(serverData.sshKey));
+                            sshKeyData.used++;
+                            sshKeyController.edit(sshKeyData);
+                          }
                           serverController.add(serverData);
                         }
                         Get.back();

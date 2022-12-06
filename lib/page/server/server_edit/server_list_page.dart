@@ -38,11 +38,27 @@ class ServerListPage extends StatelessWidget {
                     ).intoContainer(
                         padding: const EdgeInsets.symmetric(horizontal: 10));
                   }, childCount: 3)),
-                  child: const Center(
-                    child: Text("密钥列表为空"),
+                  child: SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: const Text("服务器列表为空")
+                          .intoContainer(margin: const EdgeInsets.only(bottom: 80)),
+                    ),
                   ),
                 );
               }),
+              SliverToBoxAdapter(
+                child: GetBuilder<ServerListController>(builder: (serverListController) {
+                  final sshKeyList = serverListController.modelList;
+                  return Visibility(
+                    visible: sshKeyList.isEmpty,
+                    replacement: Container(
+                      height: 220,
+                    ),
+                    child: Container(),
+                  );
+                }),
+              ),
             ],
           ),
           Align(

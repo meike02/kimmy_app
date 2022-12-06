@@ -13,15 +13,46 @@ class SSHKeyItem extends StatelessWidget {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.only(top: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(sshKeyInfo.name)
-          .editProp(
-            fontSize: 20,
-            fontWeight: FontWeight.bold
+              .editProp(
+              fontSize: 22,
+              fontWeight: FontWeight.bold
           ),
-          Text("Type: ${sshKeyInfo.type}")
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(sshKeyInfo.type),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.dns_rounded,
+                    size: 14,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  Container(width: 4,),
+                  Text("${sshKeyInfo.used}")
+                  .editProp(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer
+                  )
+                ],
+              ).intoContainer(
+                padding: EdgeInsets.symmetric(horizontal: 7,vertical: 0),
+                margin: EdgeInsets.only(top: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.secondary.editOpacity(0.3)
+                  )
+                )
+              )
+            ],
+          )
         ],
       ).intoContainer(
         margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 10)

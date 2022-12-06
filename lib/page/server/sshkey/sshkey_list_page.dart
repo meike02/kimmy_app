@@ -15,8 +15,6 @@ import '../../../data/store/sshkey_list_controller.dart';
 class SSHKeyListPage extends StatelessWidget {
   SSHKeyListPage({super.key});
 
-  final controller = Get.put<SSHKeyListController>(SSHKeyListController());
-
   @override
   Widget build(BuildContext context) {
     var bottom = MediaQuery.of(context).padding.bottom;
@@ -27,7 +25,9 @@ class SSHKeyListPage extends StatelessWidget {
         children: [
           CustomScrollView(
             slivers: [
-              const BlurSliverAppBar(title: "密钥列表"),
+              const BlurSliverAppBar(
+                title: "密钥列表",
+              ),
               GetBuilder<SSHKeyListController>(builder: (sshKeyController) {
                 final sshKeyList = sshKeyController.modelList;
                 return Visibility(
@@ -42,11 +42,27 @@ class SSHKeyListPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10));
                     }, childCount: 20),
                   ),
-                  child: const Center(
-                    child: Text("密钥列表为空"),
+                  child: SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: const Text("密钥列表为空")
+                      .intoContainer(margin: const EdgeInsets.only(bottom: 80)),
+                    ),
                   ),
                 );
               }),
+              SliverToBoxAdapter(
+                child: GetBuilder<SSHKeyListController>(builder: (sshKeyController) {
+                  final sshKeyList = sshKeyController.modelList;
+                  return Visibility(
+                    visible: sshKeyList.isEmpty,
+                    replacement: Container(
+                      height: 220,
+                    ),
+                    child: Container(),
+                  );
+                }),
+              ),
             ],
           ),
           Align(

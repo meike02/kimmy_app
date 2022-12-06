@@ -6,10 +6,15 @@ import 'package:hive/hive.dart';
 import 'package:kimmy/page/home/home.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'data/store/server_list_controller.dart';
+import 'data/store/sshkey_list_controller.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory directory = await getApplicationSupportDirectory();
   Hive.init(directory.path);
+  Get.put<ServerListController>(ServerListController());
+  Get.put<SSHKeyListController>(SSHKeyListController());
   runApp(MyApp());
 }
 

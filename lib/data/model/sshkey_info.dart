@@ -13,6 +13,7 @@ class SSHKeyInfo implements BaseModel{
   late String privateKeyData;
   late String type;
   String? password;
+  int used = 0;
 
   factory SSHKeyInfo.fromJson(json) {
     final sshKeyInfo = _$SSHKeyInfoFromJson(json);
