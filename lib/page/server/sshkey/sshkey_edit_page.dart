@@ -99,10 +99,11 @@ class SSHKeyEditPage extends StatelessWidget {
                     if (_formKey.currentState?.validate() == true) {
                       if (isEditing) {
                         await sshKeyController.edit(sshKeyData);
+                        Get.back(result: false);
                       } else {
                         await sshKeyController.add(sshKeyData);
+                        Get.back(result: true);
                       }
-                      Get.back();
                     }
                   },
                   child: const Text('提交'))

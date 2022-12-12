@@ -76,25 +76,13 @@ class ServerEditPage extends StatelessWidget {
                           return null;
                         },
                         labelText: "用户名"),
-                    StatefulBuilder(builder: (context,setState){
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // AnimatedSize(
-                          //   duration: const Duration(milliseconds: 240),
-                          //   // height: serverData.useSSHKey && expanded ? 60 + 220 : 60,
-                          //   child: ,
-                          // ),
-                          SSHKeySelector(
-                              onChanged: (useSSHKey, password, sshKeyName){
-                                serverData.useSSHKey = useSSHKey;
-                                serverData.password = password;
-                                serverData.sshKey = sshKeyName;
-                              },
-                          )
-                        ],
-                      );
-                    })
+                    SSHKeySelector(
+                      onChanged: (useSSHKey, password, sshKeyName){
+                        serverData.useSSHKey = useSSHKey;
+                        serverData.password = password;
+                        serverData.sshKey = sshKeyName;
+                      },
+                    )
                   ],
                 )),
             Row(

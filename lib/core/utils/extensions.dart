@@ -160,19 +160,23 @@ extension WidgetExt on Widget {
   }
 
   WillPopScope onReturn(Future<bool> Function() fun) {
-    return WillPopScope(child: this, onWillPop: fun);
+    return WillPopScope(onWillPop: fun, child: this);
   }
 
   GestureDetector intoGestureDetector({
     void Function()? onTap,
     void Function()? onLongPress,
-    void Function(TapDownDetails)? onTapDown,
+    void Function(TapDownDetails details)? onTapDown,
+    void Function(TapUpDetails details)? onTapUp,
+    void Function(LongPressEndDetails details)? onLongPressEnd
   }) {
     return GestureDetector(
-      child: this,
       onTapDown: onTapDown,
       onTap: onTap,
       onLongPress: onLongPress,
+      onTapUp: onTapUp,
+      onLongPressEnd: onLongPressEnd,
+      child: this,
     );
   }
 

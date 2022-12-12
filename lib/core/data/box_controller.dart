@@ -31,7 +31,7 @@ class BoxController<T extends BaseModel> extends GetxController{
     return valueList;
   }
 
-  add(T modelData) async {
+  add(T modelData,{int? index}) async {
     if(get(modelData.id)!=null){
       throw Exception("id不可重复！");
     }

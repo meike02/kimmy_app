@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'kimmy',
+      builder: BotToastInit(), //1.调用BotToastInit
+      navigatorObservers: [BotToastNavigatorObserver()], //2.注册路由观察者
       home: Home(),
       theme: ThemeData(
           useMaterial3: true,
@@ -33,7 +36,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xFF00848c), brightness: Brightness.dark),
+              seedColor: const Color(0xFF00848c), brightness: Brightness.dark),
       ),
     );
   }

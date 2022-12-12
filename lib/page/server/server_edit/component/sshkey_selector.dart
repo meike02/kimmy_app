@@ -22,9 +22,11 @@ class SSHKeySelector extends StatefulWidget {
 class _SSHKeySelectorState extends State<SSHKeySelector> {
   bool extended = true;
   bool useSSHKey = false;
+  bool passwordHidden = true;
   String? sshKeyName;
   String? password;
   TextEditingController keyController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -48,7 +50,9 @@ class _SSHKeySelectorState extends State<SSHKeySelector> {
                   });
                   if(useSSHKey) {
                     password = null;
+                    sshKeyName = keyController.text;
                   } else {
+                    password = passwordController.text;
                     sshKeyName = null;
                   }
                   widget.onChanged(useSSHKey, password, sshKeyName);
@@ -58,21 +62,40 @@ class _SSHKeySelectorState extends State<SSHKeySelector> {
         Visibility(
           visible: useSSHKey,
           replacement: createTextFormField(
+            controller: passwordController,
               validator: (value) {
                 final passwordRegExp = RegExp(
                     "(?=.*([a-zA-Z].*))(?=.*[0-9].*)[a-zA-Z0-9-*/+.~!@#\$%^&*()]{6,20}\$");
-                if (!passwordRegExp.hasMatch(value)) {
+                // 不用密钥且密码不合法
+                if (!useSSHKey && !passwordRegExp.hasMatch(value)) {
                   return "密码不合法！";
                 }
                 return null;
               },
+              obscureText: passwordHidden,
               onChanged: (value) {
                 password = value;
                 widget.onChanged(useSSHKey, password, sshKeyName);
               },
+              suffixIcon: const Icon(Icons.remove_red_eye_rounded).intoGestureDetector(
+                onTapDown: (detail) {
+                  setState(() {
+                    passwordHidden = false;
+                  });
+                },
+                onTapUp: (detail) {
+                  setState(() {
+                    passwordHidden = true;
+                  });
+                },
+                onLongPressEnd: (detail) {
+                  setState(() {
+                    passwordHidden = true;
+                  });
+                }
+              ),
               labelText: "密码",
               maxLines: 1),
-          // TODO: 选择rsakey
           child: createTextFormField(
               labelText: "密钥",
               readOnly: true,
@@ -86,7 +109,8 @@ class _SSHKeySelectorState extends State<SSHKeySelector> {
                 // widget.expanded(extended);
               },
             validator: (value) {
-                if(value.isEmpty) {
+                // 使用密钥且密钥为空
+                if(useSSHKey && value.isEmpty) {
                   return "密钥不能为空！";
                 }
                 return null;
