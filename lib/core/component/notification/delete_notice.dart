@@ -26,32 +26,22 @@ class DeleteNotice extends StatefulWidget {
 }
 
 class DeleteNoticeState extends State<DeleteNotice> {
-  var currentCountSecond = -1;
+  var currentCountSecond = -1.0;
   var percentage = 1.0;
-  late Timer countDownTimer;
+  Timer? countDownTimer;
   var deleted = true;
 
   @override
   void initState() {
     super.initState();
     if (currentCountSecond == -1) {
-      currentCountSecond = widget.countSecond;
+      currentCountSecond = widget.countSecond.toDouble();
     }
-    countDownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      currentCountSecond--;
-      if (currentCountSecond == 0) {
-        timer.cancel();
-        widget.onDisappear();
-      }
-      setState(() {
-        percentage = currentCountSecond / widget.countSecond;
-      });
-    });
   }
 
   @override
   void dispose() {
-    countDownTimer.cancel();
+    countDownTimer!.cancel();
     if (deleted) {
       widget.onDeleteConfirm();
     }
@@ -82,21 +72,33 @@ class DeleteNoticeState extends State<DeleteNotice> {
                             .editOpacity(0.12))),
                 child: Row(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          width: 22,
-                          height: 22,
-                          alignment: Alignment.center,
-                          child: Text(currentCountSecond.toString()),
-                        ),
-                        CircularProgressIndicator(
-                          color: colorScheme(context).tertiary,
-                          strokeWidth: 2,
-                          value: percentage,
-                        ).sized(width: 22, height: 22)
-                      ],
-                    ),
+                    StatefulBuilder(builder: (context, setSubState) {
+                      countDownTimer ??= Timer.periodic(const Duration(milliseconds: 8), (timer) {
+                          currentCountSecond -= 0.008;
+                          if (currentCountSecond <= 0) {
+                            countDownTimer!.cancel();
+                            widget.onDisappear();
+                          }
+                          setSubState(() {
+                            percentage = currentCountSecond / widget.countSecond;
+                          });
+                        });
+                      return Stack(
+                        children: [
+                          Container(
+                            width: 22,
+                            height: 22,
+                            alignment: Alignment.center,
+                            child: Text((currentCountSecond.toInt() + 1).toString()),
+                          ),
+                          CircularProgressIndicator(
+                            color: colorScheme(context).tertiary,
+                            strokeWidth: 2,
+                            value: percentage,
+                          ).sized(width: 22, height: 22)
+                        ],
+                      );
+                    }),
                     Container(width: 8),
                     const Text("密钥 id_rsa 已被删除").editProp(fontSize: 13),
                     Container(width: 18),
