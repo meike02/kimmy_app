@@ -6,6 +6,8 @@ import 'package:flutter_swipe_action_cell/core/controller.dart';
 import 'package:get/get.dart';
 import 'package:kimmy/core/component/app_bar/blur_sliver_app_bar.dart';
 import 'package:kimmy/core/component/notification/delete_notice.dart';
+import 'package:kimmy/core/component/notification/notice_container.dart';
+import 'package:kimmy/core/component/notification/text_notice.dart';
 import 'package:kimmy/core/utils/global_props.dart';
 import 'package:kimmy/data/model/sshkey_info.dart';
 import 'package:kimmy/page/server/sshkey/component/sshkey_item.dart';
@@ -55,33 +57,45 @@ class SSHKeyListPage extends StatelessWidget {
                             key: itemKey,
                             sshKeyInfo: sshKeyInfo,
                             onDelete: () {
-                              showAnimationWidget((cancelFunc) {
-                                return DeleteNotice(
-                                  onDisappear: cancelFunc,
-                                  onUndo: () {
-                                    sshKeyController.modelList.insert(index, sshKeyInfo);
-                                    _listKey.currentState!.insertItem(index);
-                                  },
-                                  onDeleteConfirm: () {
-                                    print("已经删除了！！！");
-                                  },
+                              if(sshKeyInfo.used>0){
+                                //此密钥已被使用，无法删除
+                                showAnimationWidget((cancelFunc) {
+                                  return const TextNotice(text: "此密钥已被使用，无法删除！");
+                                },
+                                  duration: const Duration(seconds: 4), context: context,
                                 );
-                              });
-                              _listKey.currentState!.removeItem(index,
-                                      (context, animation) {
-                                    swipeController.closeAllOpenCell();
-                                    return SizeTransition(
-                                      sizeFactor: animation.drive(
-                                          CurveTween(curve: Curves.easeInOutQuart)),
-                                      child: SSHKeyItem(
-                                        index: index,
-                                        controller: swipeController,
-                                        key: itemKey,
-                                        sshKeyInfo: sshKeyInfo,
-                                      ),
-                                    );
-                                  });
-                              sshKeyController.modelList.removeAt(index);
+                              } else {
+                                //此密钥未被使用，可以删除
+                                showAnimationWidget((cancelFunc) {
+                                  return DeleteNotice(
+                                    onDisappear: cancelFunc,
+                                    onUndo: () {
+                                      sshKeyController.modelList.insert(index, sshKeyInfo);
+                                      _listKey.currentState!.insertItem(index);
+                                    },
+                                    onDeleteConfirm: () {
+                                      print("已经删除了！！！");
+                                    },
+                                  );
+                                }, context: context,);
+                                //渲染删除动画
+                                _listKey.currentState!.removeItem(index,
+                                        (context, animation) {
+                                      swipeController.closeAllOpenCell();
+                                      return SizeTransition(
+                                        sizeFactor: animation.drive(
+                                            CurveTween(curve: Curves.easeInOutQuart)),
+                                        child: SSHKeyItem(
+                                          index: index,
+                                          controller: swipeController,
+                                          key: itemKey,
+                                          sshKeyInfo: sshKeyInfo,
+                                        ),
+                                      );
+                                    });
+                                //删除内存列表中的数据
+                                sshKeyController.modelList.removeAt(index);
+                              }
                               // sshKeyController.update();
                             },
                           ),

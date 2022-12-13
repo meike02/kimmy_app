@@ -17,25 +17,29 @@ double appBarContentHeight = 32;
 
 Future<SharedPreferences> getPreference() => SharedPreferences.getInstance();
 
-double bottom(context) =>
-    MediaQuery.of(context).padding.bottom;
+double bottom(context) => MediaQuery.of(context).padding.bottom;
 
-ColorScheme colorScheme(context) =>
-    Theme.of(context).colorScheme;
+ColorScheme colorScheme(context) => Theme.of(context).colorScheme;
 
-showAnimationWidget(ToastBuilder builder) => BotToast.showAnimationWidget(
-  toastBuilder: builder,
-  wrapToastAnimation: (controller, cancelFunc,
-      child) {
-    return FadeTransition(
-      opacity: controller.drive(
-          CurveTween(curve: Curves.easeInOutQuart)),
-      child: child,
-    );
-  },
-  onlyOne: true,
-  animationDuration: const Duration(milliseconds: 200),
-);
+showAnimationWidget(ToastBuilder builder, {required BuildContext context ,Duration? duration}) {
+  final bottomPadding = bottom(context);
+  BotToast.showAnimationWidget(
+      toastBuilder: builder,
+      wrapToastAnimation: (controller, cancelFunc, child) {
+        return ScaleTransition(
+          scale: controller.drive(CurveTween(curve: Curves.easeOutQuart)),
+          alignment: Alignment.bottomCenter,
+          child: FadeTransition(
+            opacity: controller.drive(CurveTween(curve: Curves.easeOutQuart)),
+            child: child,
+          ),
+        ).intoContainer(margin: EdgeInsets.only(bottom: bottomPadding + 60));
+      },
+      onlyOne: true,
+      animationDuration: const Duration(milliseconds: 250),
+      animationReverseDuration: const Duration(milliseconds: 250),
+      duration: duration);
+}
 
 // Future<String?> selectAndUploadPictures() async {
 //   FilePickerResult? result = await FilePicker.platform.pickFiles(

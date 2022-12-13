@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kimmy/core/component/notification/notice_container.dart';
 import 'package:kimmy/core/utils/extensions.dart';
 
 import '../../utils/global_props.dart';
@@ -51,82 +52,58 @@ class DeleteNoticeState extends State<DeleteNotice> {
 
   @override
   Widget build(BuildContext context) {
-    var bottomPadding = bottom(context);
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Column(
-        children: [
-          Expanded(child: Container()),
-          Row(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        StatefulBuilder(builder: (context, setSubState) {
+          countDownTimer ??=
+              Timer.periodic(const Duration(milliseconds: 8), (timer) {
+                currentCountSecond -= 0.008;
+                if (currentCountSecond <= 0) {
+                  countDownTimer!.cancel();
+                  widget.onDisappear();
+                }
+                setSubState(() {
+                  percentage = currentCountSecond / widget.countSecond;
+                });
+              });
+          return Stack(
             children: [
-              Expanded(child: Container()),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                margin: EdgeInsets.only(bottom: bottomPadding + 120),
-                decoration: BoxDecoration(
-                    color: colorScheme(context).tertiaryContainer,
-                    borderRadius: BorderRadius.circular(900),
-                    border: Border.all(
-                        color: colorScheme(context)
-                            .onTertiaryContainer
-                            .editOpacity(0.12))),
-                child: Row(
-                  children: [
-                    StatefulBuilder(builder: (context, setSubState) {
-                      countDownTimer ??= Timer.periodic(const Duration(milliseconds: 8), (timer) {
-                          currentCountSecond -= 0.008;
-                          if (currentCountSecond <= 0) {
-                            countDownTimer!.cancel();
-                            widget.onDisappear();
-                          }
-                          setSubState(() {
-                            percentage = currentCountSecond / widget.countSecond;
-                          });
-                        });
-                      return Stack(
-                        children: [
-                          Container(
-                            width: 22,
-                            height: 22,
-                            alignment: Alignment.center,
-                            child: Text((currentCountSecond.toInt() + 1).toString()),
-                          ),
-                          CircularProgressIndicator(
-                            color: colorScheme(context).tertiary,
-                            strokeWidth: 2,
-                            value: percentage,
-                          ).sized(width: 22, height: 22)
-                        ],
-                      );
-                    }),
-                    Container(width: 8),
-                    const Text("密钥 id_rsa 已被删除").editProp(fontSize: 13),
-                    Container(width: 18),
-                    TextButton(
-                        onPressed: () {
-                          if (deleted) {
-                            deleted = false;
-                            widget.onUndo();
-                            widget.onDisappear();
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                        ),
-                        child: const Text("点击撤销").editProp(fontSize: 13)),
-                    Container(width: 8),
-                  ],
-                ),
+                width: 22,
+                height: 22,
+                alignment: Alignment.center,
+                child: Text((currentCountSecond.toInt() + 1).toString()),
               ),
-              Expanded(child: Container())
+              CircularProgressIndicator(
+                color: colorScheme(context).tertiary,
+                strokeWidth: 2,
+                value: percentage,
+              ).sized(width: 22, height: 22)
             ],
-          )
-        ],
-      ),
+          );
+        }),
+        const SizedBox(width: 8, height: 0,),
+        const Text("密钥 id_rsa 已被删除").editProp(fontSize: 13),
+        const SizedBox(width: 18, height: 0,),
+        TextButton(
+            onPressed: () {
+              if (deleted) {
+                deleted = false;
+                widget.onUndo();
+                widget.onDisappear();
+              }
+            },
+            style: TextButton.styleFrom(
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+            ),
+            child: const Text("点击撤销").editProp(fontSize: 13)),
+        const SizedBox(width: 8, height: 0,),
+      ],
     );
   }
 }
