@@ -1,4 +1,5 @@
 import 'package:date_format/date_format.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:kimmy/core/utils/json_factory.dart';
@@ -63,12 +64,16 @@ class BoxController<T extends BaseModel> extends GetxController{
     _dealing = false;
   }
 
-  delete(String id) async {
+  deleteById(String id) async {
     _dealing = true;
     await _box.delete(id);
     _dealing = false;
     modelList.removeWhere((modelItem) => modelItem.id==id);
     update();
+  }
+
+  delete(T modelData) async {
+    deleteById(modelData.id);
   }
 
   Map<String, dynamic>? get(dynamic key) {
@@ -79,6 +84,7 @@ class BoxController<T extends BaseModel> extends GetxController{
     return null;
   }
 
+  @mustCallSuper
   loadingData() async {
     modelList = JsonFactory.fromJsonToList<T>(values);
   }
@@ -93,7 +99,6 @@ class BoxController<T extends BaseModel> extends GetxController{
     await loadingData();
     // _box.deleteFromDisk();
     _initialized = true;
-    print("初始化");
     update();
   }
 }

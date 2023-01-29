@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'package:file_picker/file_picker.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:kimmy/core/component/notification/notice_container.dart';
 import 'package:kimmy/core/utils/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +32,7 @@ showAnimationWidget(ToastBuilder builder, {required BuildContext context ,Durati
           alignment: Alignment.bottomCenter,
           child: FadeTransition(
             opacity: controller.drive(CurveTween(curve: Curves.easeOutQuart)),
-            child: child,
+            child: NoticeContainer(child: child,),
           ),
         ).intoContainer(margin: EdgeInsets.only(bottom: bottomPadding + 60));
       },

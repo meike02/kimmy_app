@@ -34,7 +34,7 @@ class FlexNavigationBar extends StatelessWidget {
           Align(
               alignment: Alignment.bottomCenter,
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                borderRadius: const BorderRadius.all(Radius.circular(navigationBarRadius)),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(
                       sigmaX: 14, sigmaY: 14, tileMode: TileMode.mirror),

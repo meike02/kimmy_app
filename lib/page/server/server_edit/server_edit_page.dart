@@ -95,8 +95,9 @@ class ServerEditPage extends StatelessWidget {
                         if(isEditing){
                           serverController.edit(serverData);
                         } else {
+                          // 新增服务器时需要同时修改sshKey的使用次数
                           if(serverData.useSSHKey){
-                            var sshKeyData = SSHKeyInfo.fromJson(sshKeyController.get(serverData.sshKey));
+                            var sshKeyData = SSHKeyInfo.fromJson(sshKeyController.get(serverData.sshKey)!);
                             sshKeyData.used++;
                             sshKeyController.edit(sshKeyData);
                           }

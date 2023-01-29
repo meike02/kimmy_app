@@ -9,6 +9,7 @@ import '../../utils/global_props.dart';
 
 class DeleteNotice extends StatefulWidget {
   final int countSecond;
+  final String noticeText;
   final void Function() onUndo;
   final void Function() onDisappear;
   final void Function() onDeleteConfirm;
@@ -16,6 +17,7 @@ class DeleteNotice extends StatefulWidget {
   const DeleteNotice(
       {super.key,
       this.countSecond = 5,
+      required this.noticeText,
       required this.onUndo,
       required this.onDeleteConfirm,
       required this.onDisappear});
@@ -58,15 +60,15 @@ class DeleteNoticeState extends State<DeleteNotice> {
         StatefulBuilder(builder: (context, setSubState) {
           countDownTimer ??=
               Timer.periodic(const Duration(milliseconds: 8), (timer) {
-                currentCountSecond -= 0.008;
-                if (currentCountSecond <= 0) {
-                  countDownTimer!.cancel();
-                  widget.onDisappear();
-                }
-                setSubState(() {
-                  percentage = currentCountSecond / widget.countSecond;
-                });
-              });
+            currentCountSecond -= 0.008;
+            if (currentCountSecond <= 0) {
+              countDownTimer!.cancel();
+              widget.onDisappear();
+            }
+            setSubState(() {
+              percentage = currentCountSecond / widget.countSecond;
+            });
+          });
           return Stack(
             children: [
               Container(
@@ -83,9 +85,15 @@ class DeleteNoticeState extends State<DeleteNotice> {
             ],
           );
         }),
-        const SizedBox(width: 8, height: 0,),
-        const Text("密钥 id_rsa 已被删除").editProp(fontSize: 13),
-        const SizedBox(width: 18, height: 0,),
+        const SizedBox(
+          width: 8,
+          height: 0,
+        ),
+        Text(widget.noticeText).editProp(fontSize: 13),
+        const SizedBox(
+          width: 18,
+          height: 0,
+        ),
         TextButton(
             onPressed: () {
               if (deleted) {
@@ -102,7 +110,10 @@ class DeleteNoticeState extends State<DeleteNotice> {
               shadowColor: Colors.transparent,
             ),
             child: const Text("点击撤销").editProp(fontSize: 13)),
-        const SizedBox(width: 8, height: 0,),
+        const SizedBox(
+          width: 8,
+          height: 0,
+        ),
       ],
     );
   }

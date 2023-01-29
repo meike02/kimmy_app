@@ -41,7 +41,7 @@ class SSHKeyListPage extends StatelessWidget {
                 return Visibility(
                   visible: sshKeyList.isEmpty,
                   replacement: SliverPadding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.only(top: 12),
                     sliver: SliverAnimatedList(
                       key: _listKey,
                       itemBuilder: (BuildContext context, int index,
@@ -62,19 +62,20 @@ class SSHKeyListPage extends StatelessWidget {
                                 showAnimationWidget((cancelFunc) {
                                   return const TextNotice(text: "此密钥已被使用，无法删除！");
                                 },
-                                  duration: const Duration(seconds: 4), context: context,
+                                  duration: const Duration(seconds: 3), context: context,
                                 );
                               } else {
                                 //此密钥未被使用，可以删除
                                 showAnimationWidget((cancelFunc) {
                                   return DeleteNotice(
+                                    noticeText: "密钥 ${sshKeyInfo.name} 已被删除",
                                     onDisappear: cancelFunc,
                                     onUndo: () {
                                       sshKeyController.modelList.insert(index, sshKeyInfo);
                                       _listKey.currentState!.insertItem(index);
                                     },
                                     onDeleteConfirm: () {
-                                      print("已经删除了！！！");
+                                      sshKeyController.delete(sshKeyInfo);
                                     },
                                   );
                                 }, context: context,);
@@ -120,7 +121,7 @@ class SSHKeyListPage extends StatelessWidget {
                   return Visibility(
                     visible: sshKeyList.isEmpty,
                     replacement: Container(
-                      height: 220,
+                      height: bottom(context) + 180,
                     ),
                     child: Container(),
                   );
@@ -136,7 +137,7 @@ class SSHKeyListPage extends StatelessWidget {
                   Get.to(() => SSHKeyEditPage())?.then((added){
                     if (added == true) {
                       final length = sshKeyController.modelList.length;
-                      _listKey.currentState!.insertItem(length-1);
+                      _listKey.currentState?.insertItem(length-1);
                     }
                   });
                 },

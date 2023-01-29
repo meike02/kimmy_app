@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:get/get.dart';
+import 'package:kimmy/core/component/container/item_card.dart';
 import 'package:kimmy/data/model/sshkey_info.dart';
 import 'package:kimmy/page/server/sshkey/sshkey_edit_page.dart';
 import 'package:kimmy/core/utils/extensions.dart';
@@ -23,34 +24,13 @@ class SSHKeyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: SwipeActionCell(
+    return ItemCard(
         index: index,
-        firstActionWillCoverAllSpaceOnDeleting: false,
-        backgroundColor: Colors.transparent,
         controller: controller,
-        key: ValueKey<SSHKeyInfo>(sshKeyInfo),
-        trailingActions: [
-          // IconButton(onPressed: (){}, icon: Icon(Icons.delete_rounded)),
-          SwipeAction(
-              color: Colors.transparent,
-              content: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: isDark(context) ? Colors.black12 : Colors.white12,
-                    borderRadius: BorderRadius.circular(30)),
-                child: const Icon(Icons.delete_rounded),
-              ),
-              onTap: (handler) {
-                controller.closeAllOpenCell();
-                Future.delayed(const Duration(milliseconds: 400)).then((value) {
-                  onDelete?.call();
-                });
-              }),
-        ],
+        onDelete: onDelete,
+        onTap: () {
+          Get.to(() => SSHKeyEditPage(sshKeyInfo: sshKeyInfo));
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -73,11 +53,11 @@ class SSHKeyItem extends StatelessWidget {
                     ),
                     Text("${sshKeyInfo.used}").editProp(
                         fontSize: 14,
-                        color:
-                            colorScheme(context).onSecondaryContainer)
+                        color: colorScheme(context).onSecondaryContainer)
                   ],
                 ).intoContainer(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
                     margin: const EdgeInsets.only(top: 6),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
@@ -90,11 +70,6 @@ class SSHKeyItem extends StatelessWidget {
               ],
             )
           ],
-        ).intoContainer(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10)),
-      ),
-    ).intoInkWell(onTap: () {
-      Get.to(() => SSHKeyEditPage(sshKeyInfo: sshKeyInfo));
-    }).intoContainer(margin: const EdgeInsets.symmetric(horizontal: 10));
+        ));
   }
 }

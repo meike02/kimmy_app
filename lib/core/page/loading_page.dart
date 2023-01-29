@@ -3,6 +3,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:kimmy/core/data/box_controller.dart';
 
+import '../utils/global_props.dart';
+
 class LoadingPage<T extends BoxController> extends StatefulWidget {
   LoadingPage(
       {super.key, required this.child});
@@ -58,7 +60,7 @@ class _LoadingPageState extends State<LoadingPage>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SpinKitFadingCube(color: Colors.white60,size: 14,),
+              SpinKitFadingCircle(color: isDark(context) ? Colors.white60 : Colors.black87,size: 14,),
               Container(width: 16),
               const Text("正在加载")
             ],

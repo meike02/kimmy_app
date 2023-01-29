@@ -15,7 +15,7 @@ class SSHKeyInfo implements BaseModel{
   String? password;
   int used = 0;
 
-  factory SSHKeyInfo.fromJson(json) {
+  factory SSHKeyInfo.fromJson(Map<String, dynamic> json) {
     final sshKeyInfo = _$SSHKeyInfoFromJson(json);
     sshKeyInfo.password = decrypt(sshKeyInfo.password);
     sshKeyInfo.privateKeyData = decrypt(sshKeyInfo.privateKeyData)!;

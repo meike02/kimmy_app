@@ -14,8 +14,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory directory = await getApplicationSupportDirectory();
   Hive.init(directory.path);
-  Get.put<ServerListController>(ServerListController());
   Get.put<SSHKeyListController>(SSHKeyListController());
+  Get.put<ServerListController>(ServerListController());
   runApp(MyApp());
 }
 
